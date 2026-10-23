@@ -2,15 +2,14 @@
 
 Static promo site (no build step). Everything is in this folder.
 
-## Hosting on GitHub Pages (free, repo must be public)
+## Hosting (Cloudflare Pages, connected to this repo)
 
-1. Repo Settings → Pages → Source: Deploy from a branch → `main` / `(root)` → Save.
-2. Custom domain: type e.g. `padel.yourdomain.com` and save (this adds a `CNAME` file).
-3. In Cloudflare DNS add a CNAME record: name `padel`, target `antoniopratas.github.io`,
-   proxy **DNS only** (grey cloud) until GitHub shows the certificate is issued, then tick
-   "Enforce HTTPS". You can turn the orange cloud on afterwards (SSL mode: Full).
-
-Every push to `main` redeploys the site.
+- Production branch: `main`. Every push to `main` deploys the live site.
+- Build command: none. Build output directory: `/` (the repo root).
+- Any other branch (e.g. `preview`) gets its own preview URL, `<branch>.<project>.pages.dev`,
+  so changes can be checked before they go to `main`.
+- The custom domain is set in the Pages project under Custom domains; Cloudflare manages the
+  DNS record and HTTPS.
 
 ## Sign-up form
 
