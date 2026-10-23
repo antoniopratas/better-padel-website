@@ -183,6 +183,7 @@ fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; }
 
 footer { border-top: 3px solid var(--net); background: var(--b); background-image: var(--tex-b); padding-block: 32px; color: var(--muted); font-size: 14px; }
 footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: space-between; align-items: center; }
+footer .brand b:not(.a) { color: #fff; }
 
 /* scheme switcher (preview only) */
 .schemes { position: fixed; z-index: 20; left: 50%; transform: translateX(-50%); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 6px; padding: 6px 6px 6px 14px; border-radius: 999px; background: #0b1220; color: #fff; box-shadow: 0 12px 34px -8px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.14); font: 600 13px/1 "DM Sans", system-ui, sans-serif; max-width: calc(100vw - 24px); }
