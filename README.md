@@ -14,8 +14,8 @@ Every push to `main` redeploys the site.
 
 ## Sign-up form
 
-Set `const FORM_ENDPOINT = "";` in `index.html` to a Formspree (or similar) endpoint,
-e.g. `https://formspree.io/f/abcdwxyz`. Until then the form says sign-ups open soon.
+Sign-ups go to Formspree (`FORM_ENDPOINT` in `index.html`). Each one has email, platform
+(garmin / apple / both), watch model and date. See and export them in the Formspree dashboard.
 
 ## Colour schemes
 
