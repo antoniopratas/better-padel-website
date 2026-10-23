@@ -44,15 +44,15 @@ img { display: block; height: auto; }
 .band { padding-block: 88px; border-top: 3px solid var(--net); background: var(--a); background-image: var(--tex-a); }
 .band.b { background-color: var(--b); background-image: var(--tex-b); }
 
-/* blurred background shapes, added by the script at the end and moved on scroll for parallax */
+/* blurred background shapes, added by the script at the end; they stay still while the mockups move */
 .hero, .band { position: relative; overflow: hidden; isolation: isolate; }
 .hero > .wrap, .band > .wrap { position: relative; z-index: 1; }
 .glow { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-.glow i { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .8; will-change: transform; }
+.glow i { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .8; }
 .glow i.lime { background: radial-gradient(circle, rgba(214,244,58,.42), rgba(214,244,58,0) 70%); }
 .glow i.blue { background: radial-gradient(circle, rgba(70,120,255,.38), rgba(70,120,255,0) 70%); }
 .glow i.white { background: radial-gradient(circle, rgba(255,255,255,.16), rgba(255,255,255,0) 70%); }
-.watches img { will-change: transform; }
+.watches img, .summary-shots img, .layout img { will-change: transform; }
 @media (max-width: 640px) { .glow i { filter: blur(60px); } }
 @media (max-width: 640px) { .band { padding-block: 60px; } }
 
@@ -341,42 +341,48 @@ footer .contact:hover b { color: var(--accent); text-decoration: underline; text
 </footer>
 
 <script>
-/* ---------- Blurred shapes and parallax ---------- */
+/* ---------- Blurred shapes (fixed) and parallax on the watches and mockups ---------- */
 (function () {
-  // [section selector, shapes as [colour, size px, left %, top %, speed]]
+  // [section selector, shapes as [colour, size px, left %, top %]]
   const layout = [
-    [".hero",      [["lime", 520, 62, -10, .18], ["blue", 440, -12, 45, .10], ["white", 300, 88, 70, .25]]],
-    ["#stats",     [["blue", 480, 70, 10, .14], ["lime", 360, -8, 60, .20]]],
-    ["#how",       [["lime", 420, 78, 40, .16], ["blue", 380, 5, -15, .10]]],
-    ["#layouts",   [["blue", 520, 40, 20, .12], ["lime", 320, 90, 75, .22]]],
-    ["#interest",  [["lime", 480, 60, 5, .15], ["blue", 400, -10, 55, .12]]]
+    [".hero",     [["lime", 520, 62, -10], ["blue", 440, -12, 45], ["white", 300, 88, 70]]],
+    ["#stats",    [["blue", 480, 70, 10], ["lime", 360, -8, 60]]],
+    ["#how",      [["lime", 420, 78, 40], ["blue", 380, 5, -15]]],
+    ["#layouts",  [["blue", 520, 40, 20], ["lime", 320, 90, 75]]],
+    ["#interest", [["lime", 480, 60, 5], ["blue", 400, -10, 55]]]
   ];
-  const shapes = [];
   layout.forEach(([sel, list]) => {
     const sec = document.querySelector(sel); if (!sec) return;
     const g = document.createElement("div"); g.className = "glow"; g.setAttribute("aria-hidden", "true");
-    list.forEach(([c, size, x, y, speed]) => {
+    list.forEach(([c, size, x, y]) => {
       const i = document.createElement("i"); i.className = c;
       Object.assign(i.style, { width: size + "px", height: size + "px", left: x + "%", top: y + "%" });
-      g.appendChild(i); shapes.push({ el: i, sec, speed });
+      g.appendChild(i);
     });
     sec.prepend(g);
   });
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const aw = document.querySelector(".hero .pair-aw"), gm = document.querySelector(".hero .pair-gm");
+
+  // each mockup drifts up at its own speed as its row scrolls past; the Garmin sits in front, so it moves more
+  const movers = [];
+  document.querySelectorAll(".watches, .summary-shots").forEach(box => {
+    box.querySelectorAll(".pair-aw").forEach(el => movers.push({ el, box, speed: .07 }));
+    box.querySelectorAll(".pair-gm").forEach(el => movers.push({ el, box, speed: .15 }));
+  });
+  const grid = document.querySelector(".layouts");
+  if (grid) grid.querySelectorAll(".layout img").forEach((el, n) => movers.push({ el, box: grid, speed: [.06, .14, .06][n] || .1, max: 28 }));
+
   let ticking = false;
   function update() {
     ticking = false;
     const vh = window.innerHeight;
-    shapes.forEach(s => {
-      const r = s.sec.getBoundingClientRect();
+    movers.forEach(m => {
+      const r = m.box.getBoundingClientRect(); // the row, not the image, so the image's own movement never feeds back
       if (r.bottom < -200 || r.top > vh + 200) return;
-      const off = (r.top + r.height / 2 - vh / 2) * s.speed;
-      s.el.style.transform = "translate3d(0," + off.toFixed(1) + "px,0)";
+      let off = -(vh / 2 - (r.top + r.height / 2)) * m.speed;
+      if (m.max) off = Math.max(-m.max, Math.min(m.max, off)); // keep the layout faces off their captions
+      m.el.style.transform = "translate3d(0," + off.toFixed(1) + "px,0)";
     });
-    const y = Math.min(window.scrollY, vh);
-    if (aw) aw.style.transform = "translate3d(0," + (y * -0.06).toFixed(1) + "px,0)";
-    if (gm) gm.style.transform = "translate3d(0," + (y * -0.12).toFixed(1) + "px,0)";
   }
   function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
   window.addEventListener("scroll", onScroll, { passive: true });
