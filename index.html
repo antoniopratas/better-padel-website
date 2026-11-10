@@ -381,10 +381,13 @@ footer .contact:hover b { color: var(--accent); text-decoration: underline; text
   const grid = document.querySelector(".layouts");
   if (grid) grid.querySelectorAll(".layout img").forEach((el, n) => movers.push({ el, box: grid, speed: [.06, .14, .06][n] || .1, max: 28 }));
 
+  const narrow = window.matchMedia("(max-width: 720px)");
   let ticking = false;
   function update() {
     ticking = false;
     const vh = window.innerHeight;
+    // on phones everything stacks in one column, so moving images would slide over the text
+    if (narrow.matches) { movers.forEach(m => { m.el.style.transform = ""; }); return; }
     movers.forEach(m => {
       const r = m.box.getBoundingClientRect(); // the row, not the image, so the image's own movement never feeds back
       if (r.bottom < -200 || r.top > vh + 200) return;
