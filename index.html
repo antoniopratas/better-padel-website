@@ -121,9 +121,9 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 @media (max-width: 900px) { .stats { grid-template-columns: minmax(0, 1fr); } }
 .stats-copy { display: grid; gap: 22px; min-width: 0; }
 .stat-list { display: grid; gap: 0; }
-.stat { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 18px; padding-block: 18px; border-top: 1px solid var(--line); align-items: center; }
+.stat { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 18px; padding-block: 18px; border-top: 1px solid var(--line); align-items: center; }
 .stat:last-child { border-bottom: 1px solid var(--line); }
-.stat .big { font-family: var(--display); font-weight: 800; font-size: 46px; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.stat .big { font-family: var(--display); font-weight: 800; font-size: 30px; line-height: .95; text-transform: uppercase; color: var(--accent); }
 .stat p { color: var(--muted); }
 .stat p b { color: var(--fg); font-weight: 700; display: block; }
 
@@ -248,9 +248,9 @@ footer .contact:hover b { color: var(--accent); text-decoration: underline; text
         <h2>Know why you won. Or why you didn't.</h2>
         <p class="lede">Every point records how it ended, so the summary shows what to work on.</p>
         <div class="stat-list">
-          <div class="stat"><span class="big">12</span><p><b>Winners, for each of you</b>The shots that won the point outright, for you and your partner.</p></div>
-          <div class="stat"><span class="big">7</span><p><b>Errors, for each of you</b>The points you gave away. The number to bring down.</p></div>
-          <div class="stat"><span class="big">57%</span><p><b>Points won</b>For both teams, so a close match tells you how close it was.</p></div>
+          <div class="stat"><span class="big">Per player</span><p><b>Winners and errors for each of you</b>Split between you and your partner, so you both see your own game.</p></div>
+          <div class="stat"><span class="big">Every match</span><p><b>Saved with the score</b>To Apple Health or Garmin Connect as a workout, so you can look back.</p></div>
+          <div class="stat"><span class="big">1 tap</span><p><b>To log a point</b>Tap again straight away to say if it was a winner or an error.</p></div>
         </div>
       </div>
       <div class="summary-shots">
